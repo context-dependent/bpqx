@@ -1,7 +1,19 @@
 #' Retrieve Qualtrics API token
 api_token <- function() {
     if (token_cache_exists()) {
-        readLines("~/.bpqx-auth")[1]
+        yaml::read_yaml("~/.bpqx-auth")$api_token
+    } else {
+        stop(
+            "Cannot find token cache file at ~/.bpqx-auth\n",
+            "Please run `save_api_token()`\n"
+        )
+    }
+}
+
+#' Retrieve Data Center
+data_center <- function() {
+    if (token_cache_exists()) {
+        yaml::read_yaml("~/.bpqx-auth")$data_center
     } else {
         stop(
             "Cannot find token cache file at ~/.bpqx-auth\n",
@@ -11,11 +23,13 @@ api_token <- function() {
 }
 
 #' Stores Qualtrics API token in "~/.bpqx-auth"
+#' @param data_center
+#'   A string specifying the data center to use
 #' @param .t
 #'   A string which overrides interactive prompt.
 #'   strictly for automated testing.
 #' @export
-save_api_token <- function(.t = NULL) {
+save_api_token <- function(data_center = "blueprintade.yul1", .t = NULL) {
     if (is.null(.t)) {
         p <- c(
             "Paste your Qualtrics API Token in the field below.",
@@ -35,7 +49,13 @@ save_api_token <- function(.t = NULL) {
         file.remove("~/.bpqx-auth")
     }
 
-    writeLines(t, "~/.bpqx-auth")
+    yaml::write_yaml(
+        list(
+            api_token = t,
+            data_center = data_center
+        ),
+        "~/.bpqx-auth"
+    )
 }
 
 
