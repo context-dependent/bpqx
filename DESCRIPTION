@@ -16,4 +16,8 @@ URL: https://github.com/context-dependent/bpqx
 BugReports: https://github.com/context-dependent/bpqx/issues
 Imports: 
     getPass (>= 0.2.2),
-    keyring
+    httr2 (>= 0.2.2),
+    keyring,
+    purrr (>= 1.0.1),
+    tibble (>= 3.2.1),
+    yaml (>= 2.3.7)
