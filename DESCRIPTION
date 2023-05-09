@@ -14,3 +14,5 @@ Suggests:
 Config/testthat/edition: 3
 URL: https://github.com/context-dependent/bpqx
 BugReports: https://github.com/context-dependent/bpqx/issues
+Imports: 
+    keyring
