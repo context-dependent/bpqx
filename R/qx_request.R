@@ -2,8 +2,8 @@
 #' @param ...
 #'   strings, beginning with the endpoint,
 #'   representing the additional pathing following ...API/v3
-qx_req <- function(u) {
-    req <- httr2::request(u)
+qx_req <- function(...) {
+    req <- httr2::request(qx_url(...))
     req |> httr2::req_headers(
         "X-API-TOKEN" = api_token(),
         "Content-Type" = "application/json",

@@ -1,7 +1,7 @@
 #' List surveys accessible with saved api token
+#' @export
 list_surveys <- function() {
-    base_url <- qx_url("surveys")
-    req <- qx_req(base_url)
+    req <- qx_req("surveys")
 
     f <- function(o) {
         rsp <- req |>
