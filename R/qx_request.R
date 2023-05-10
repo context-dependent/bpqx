@@ -4,12 +4,14 @@
 #'   representing the additional pathing following ...API/v3
 qx_req <- function(...) {
     req <- httr2::request(qx_url(...))
-    req |> httr2::req_headers(
-        "X-API-TOKEN" = api_token(),
-        "Content-Type" = "application/json",
-        "Accept" = "*/*",
-        "accept-encoding" = "gzip, deflate"
-    )
+    req |>
+        httr2::req_headers(
+            "X-API-TOKEN" = api_token(),
+            "Content-Type" = "application/json",
+            "Accept" = "*/*",
+            "accept-encoding" = "gzip, deflate"
+        ) |>
+        httr2::req_error(body = qx_code)
 }
 
 qx_url <- function(...) {
@@ -18,7 +20,7 @@ qx_url <- function(...) {
 }
 
 qx_code <- function(res) {
-    interp <- switch(as.character(res$status_code),
+    interp <- switch(as.character(res$status),
         `200` = "Success: 200",
         `401` =
             c(
@@ -81,6 +83,6 @@ qx_code <- function(res) {
             "Please check your request, and report at https://github.com/ropensci/qualtRics/issues if reoccurring:"
         )
     )
-    res <- interp |> paste0(collapse = "\n")
-    return(res)
+
+    return(interp)
 }

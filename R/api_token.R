@@ -1,19 +1,21 @@
 #' Retrieve Qualtrics API token
-api_token <- function() {
-    if (token_cache_exists()) {
-        yaml::read_yaml("~/.bpqx-auth")$api_token
+#' @param .f
+#'   String pointing to the location of the credentials file
+api_token <- function(.f = "~/.bpqx-auth") {
+    if (token_cache_exists(.f)) {
+        yaml::read_yaml(.f)$api_token
     } else {
         stop(
-            "Cannot find token cache file at ~/.bpqx-auth\n",
+            glue::glue("Cannot find token cache file at {.f}\n"),
             "Please run `save_api_token()`\n"
         )
     }
 }
 
 #' Retrieve Data Center
-data_center <- function() {
-    if (token_cache_exists()) {
-        yaml::read_yaml("~/.bpqx-auth")$data_center
+data_center <- function(.f = "~/.bpqx-auth") {
+    if (token_cache_exists(.f)) {
+        yaml::read_yaml(.f)$data_center
     } else {
         stop(
             "Cannot find token cache file at ~/.bpqx-auth\n",
@@ -29,7 +31,10 @@ data_center <- function() {
 #'   A string which overrides interactive prompt.
 #'   strictly for automated testing.
 #' @export
-save_api_token <- function(data_center = "blueprintade.yul1", .t = NULL) {
+save_api_token <- function(
+    data_center = "blueprintade.yul1",
+    .t = NULL,
+    .f = "~/.bpqx-auth") {
     if (is.null(.t)) {
         p <- c(
             "Paste your Qualtrics API Token in the field below.",
@@ -45,8 +50,8 @@ save_api_token <- function(data_center = "blueprintade.yul1", .t = NULL) {
         t <- .t
     }
 
-    if (token_cache_exists()) {
-        file.remove("~/.bpqx-auth")
+    if (token_cache_exists(.f)) {
+        file.remove(.f)
     }
 
     yaml::write_yaml(
@@ -54,12 +59,12 @@ save_api_token <- function(data_center = "blueprintade.yul1", .t = NULL) {
             api_token = t,
             data_center = data_center
         ),
-        "~/.bpqx-auth"
+        .f
     )
 }
 
 
 #' Check if "~/.bpqx-auth" exists
-token_cache_exists <- function() {
-    file.exists("~/.bpqx-auth")
+token_cache_exists <- function(.f = "~/.bpqx-auth") {
+    file.exists(.f)
 }

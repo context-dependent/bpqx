@@ -1,10 +1,13 @@
 Package: bpqx
-Title: What the Package Does (One Line, Title Case)
+Title: Qualtrics API V3 wrapper
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    person("Thomas", "McManus", email = "thomas.keith.mcmanus@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0009-0005-0839-3018"))
+Description: 
+    Wraps Qualtrics API functions for finding surveys and fetching responses.
+    Aims to improve on the functional but clunky and user-hostile qualtr without 
+    breaking existing workflows. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -17,7 +20,6 @@ BugReports: https://github.com/context-dependent/bpqx/issues
 Imports: 
     getPass (>= 0.2.2),
     httr2 (>= 0.2.2),
-    keyring,
     purrr (>= 1.0.1),
     tibble (>= 3.2.1),
     yaml (>= 2.3.7)

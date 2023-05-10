@@ -1,5 +1,5 @@
 test_that("API key storage and retrieval behaving as expected", {
-  save_api_token(.t = "test-value", )
-  expect_equal(api_token(), "test-value")
-  expect_equal(data_center(), "blueprintade.yul1")
+  save_api_token(.t = "test-value", .f = "~/.bpqx-test-auth")
+  expect_equal(api_token(.f = "~/.bpqx-test-auth"), "test-value")
+  expect_equal(data_center(.f = "~/.bpqx-test-auth"), "blueprintade.yul1")
 })
