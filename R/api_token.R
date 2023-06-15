@@ -1,31 +1,3 @@
-#' Retrieve Qualtrics API token
-#' @param .f
-#'   String pointing to the location of the credentials file
-api_token <- function(.f = "~/.bpqx-auth") {
-    if (token_cache_exists(.f)) {
-        yaml::read_yaml(.f)$api_token
-    } else {
-        rlang::abort(
-            message = c(
-                glue::glue("Cannot find token cache file at {.f}\n"),
-                "Please run `save_api_token()`\n"
-            )
-        )
-    }
-}
-
-#' Retrieve Data Center
-data_center <- function(.f = "~/.bpqx-auth") {
-    if (token_cache_exists(.f)) {
-        yaml::read_yaml(.f)$data_center
-    } else {
-        stop(
-            "Cannot find token cache file at ~/.bpqx-auth\n",
-            "Please run `save_api_token()` to register your token\n"
-        )
-    }
-}
-
 #' Stores Qualtrics API token in "~/.bpqx-auth"
 #' @param data_center
 #'   A string specifying the data center to use
@@ -65,6 +37,34 @@ save_api_token <- function(
     )
 }
 
+
+#' Retrieve Qualtrics API token
+#' @param .f
+#'   String pointing to the location of the credentials file
+api_token <- function(.f = "~/.bpqx-auth") {
+    if (token_cache_exists(.f)) {
+        yaml::read_yaml(.f)$api_token
+    } else {
+        rlang::abort(
+            message = c(
+                glue::glue("Cannot find token cache file at {.f}\n"),
+                "Please run `save_api_token()`\n"
+            )
+        )
+    }
+}
+
+#' Retrieve Data Center
+data_center <- function(.f = "~/.bpqx-auth") {
+    if (token_cache_exists(.f)) {
+        yaml::read_yaml(.f)$data_center
+    } else {
+        stop(
+            "Cannot find token cache file at ~/.bpqx-auth\n",
+            "Please run `save_api_token()` to register your token\n"
+        )
+    }
+}
 
 #' Check if "~/.bpqx-auth" exists
 token_cache_exists <- function(.f = "~/.bpqx-auth") {
