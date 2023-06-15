@@ -5,9 +5,11 @@ api_token <- function(.f = "~/.bpqx-auth") {
     if (token_cache_exists(.f)) {
         yaml::read_yaml(.f)$api_token
     } else {
-        stop(
-            glue::glue("Cannot find token cache file at {.f}\n"),
-            "Please run `save_api_token()`\n"
+        rlang::abort(
+            message = c(
+                glue::glue("Cannot find token cache file at {.f}\n"),
+                "Please run `save_api_token()`\n"
+            )
         )
     }
 }
@@ -19,7 +21,7 @@ data_center <- function(.f = "~/.bpqx-auth") {
     } else {
         stop(
             "Cannot find token cache file at ~/.bpqx-auth\n",
-            "Please run `save_api_token()`\n"
+            "Please run `save_api_token()` to register your token\n"
         )
     }
 }
