@@ -1,72 +1,45 @@
-#' Stores Qualtrics API token in "~/.bpqx-auth"
-#' @param data_center
-#'   A string specifying the data center to use
-#' @param .t
-#'   A string which overrides interactive prompt.
-#'   strictly for automated testing.
-#' @export
-save_api_token <- function(
-    data_center = "blueprintade.yul1",
-    .t = NULL,
-    .f = "~/.bpqx-auth") {
-    if (is.null(.t)) {
-        p <- c(
-            "Paste your Qualtrics API Token in the field below.",
-            "Visit https://api.qualtrics.com/ZG9jOjg3NjYzMg-api-key-authentication",
-            "if you need help finding it.",
-            "Qualtrics API Token > "
-        )
-        t <- getPass::getPass(
-            msg = paste0(p, collapse = "\n"),
-            forcemask = TRUE
-        )
-    } else {
-        t <- .t
-    }
-
-    if (token_cache_exists(.f)) {
-        file.remove(.f)
-    }
-
-    yaml::write_yaml(
-        list(
-            api_token = t,
-            data_center = data_center
-        ),
-        .f
+#' Attempt to retrieve Qualtrics API token and data center from keyring
+#' If not found, will prompt user to enter API token and data center
+#' @rdname auth
+#' @param reset_api_token If TRUE, will prompt user to enter new API token
+#' @param custom_data_center If not NULL, will set data center to this value
+auth <- function(reset_api_token = FALSE, custom_data_center = NULL) {
+    list(
+        api_token = get_set_api_token(reset = reset_api_token), 
+        data_center = get_set_data_center(custom_data_center)
     )
 }
 
-
 #' Retrieve Qualtrics API token
-#' @param .f
-#'   String pointing to the location of the credentials file
-api_token <- function(.f = "~/.bpqx-auth") {
-    if (token_cache_exists(.f)) {
-        yaml::read_yaml(.f)$api_token
-    } else {
-        rlang::abort(
-            message = c(
-                glue::glue("Cannot find token cache file at {.f}\n"),
-                "Please run `save_api_token()`\n"
+#' @rdname auth
+get_set_api_token <- function(reset) {
+    if (!("bpqx-api-token" %in% keyring::key_list()[[1]]) || reset) {
+        keyring::key_set_with_value(
+            "bpqx-api-token",
+            password = getPass::getPass(
+                msg = "Enter your Qualtrics API Token > ",
+                forcemask = TRUE
             )
         )
     }
+
+    keyring::key_get("bpqx-api-token")
 }
 
 #' Retrieve Data Center
-data_center <- function(.f = "~/.bpqx-auth") {
-    if (token_cache_exists(.f)) {
-        yaml::read_yaml(.f)$data_center
-    } else {
-        stop(
-            "Cannot find token cache file at ~/.bpqx-auth\n",
-            "Please run `save_api_token()` to register your token\n"
+#' @rdname auth
+#' @importFrom rlang "%||%"
+get_set_data_center <- function(custom_value = NULL) {
+    if (
+        !("bpqx-data-center" %in% keyring::key_list()[[1]]) || 
+        !is.null(custom_value)
+    ) {
+        data_center <- custom_value %||% "blueprintade.yul1"
+        keyring::key_set_with_value(
+            "bpqx-data-center",
+            password = data_center
         )
     }
-}
 
-#' Check if "~/.bpqx-auth" exists
-token_cache_exists <- function(.f = "~/.bpqx-auth") {
-    file.exists(.f)
+    keyring::key_get("bpqx-data-center")
 }

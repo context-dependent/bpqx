@@ -6,7 +6,7 @@ qx_req <- function(...) {
     req <- httr2::request(qx_url(...))
     req |>
         httr2::req_headers(
-            "X-API-TOKEN" = api_token(),
+            "X-API-TOKEN" = auth()$api_token,
             "Content-Type" = "application/json",
             "Accept" = "*/*",
             "accept-encoding" = "gzip, deflate"
@@ -16,7 +16,7 @@ qx_req <- function(...) {
 
 qx_url <- function(...) {
     path <- paste0(unlist(list(...)), collapse = "/")
-    glue::glue("https://{data_center()}.qualtrics.com/API/v3/{path}")
+    glue::glue("https://{auth()$data_center}.qualtrics.com/API/v3/{path}")
 }
 
 qx_code <- function(res) {

@@ -20,6 +20,8 @@ BugReports: https://github.com/context-dependent/bpqx/issues
 Imports: 
     getPass (>= 0.2.2),
     httr2 (>= 0.2.2),
+    magrittr,
     purrr (>= 1.0.1),
+    rlang (>= 1.1.2),
     tibble (>= 3.2.1),
     yaml (>= 2.3.7)
