@@ -10,7 +10,10 @@ fetch_responses <- function(survey_id) {
         httr2::req_perform() |>
         httr2::resp_body_json()
 
-    pb <- progress::progress_bar$new(total = 100)
+    pb <- progress::progress_bar$new(
+        format = glue::glue("fetch {survey_id} [:bar] :percent :eta"),
+        total = 100
+    )
     progress <- 0
     req_check <- req_base |>
         httr2::req_url_path_append(rsp_progress$result$progressId)
