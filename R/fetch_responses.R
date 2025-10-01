@@ -25,12 +25,17 @@ fetch_responses <- function(survey_id) {
             httr2::resp_body_json()
         
         new_prog <- rsp_check$result$percentComplete
+
         delta <- new_prog - prog
+
+        if(pb$finished) {
+            break
+        }
 
         if(delta > 0) {
             pb$update(new_prog / 100, tokens = list(what = survey_id))
         } else {
-            pb$tick(tokens = list(what = survey_id))
+            pb$tick(0, tokens = list(what = survey_id))
         }
         
         prog <- new_prog
